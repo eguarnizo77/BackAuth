@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32414.318
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackAuth", "BackAuth\BackAuth.csproj", "{212A65C0-0977-474A-A961-55F00CFD5040}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackAuth.Data", "NetCoreAPIMySQL\BackAuth.Data.csproj", "{9DB8B3E0-CBFD-4DE0-AE4A-AEDC51BB21D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackAuth.Model", "NetCoreAPIMySQL.Model\BackAuth.Model.csproj", "{53BBE553-39B0-4CF5-8E06-789D264F0D22}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{212A65C0-0977-474A-A961-55F00CFD5040}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{212A65C0-0977-474A-A961-55F00CFD5040}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{212A65C0-0977-474A-A961-55F00CFD5040}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{212A65C0-0977-474A-A961-55F00CFD5040}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DB8B3E0-CBFD-4DE0-AE4A-AEDC51BB21D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DB8B3E0-CBFD-4DE0-AE4A-AEDC51BB21D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DB8B3E0-CBFD-4DE0-AE4A-AEDC51BB21D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DB8B3E0-CBFD-4DE0-AE4A-AEDC51BB21D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53BBE553-39B0-4CF5-8E06-789D264F0D22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53BBE553-39B0-4CF5-8E06-789D264F0D22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53BBE553-39B0-4CF5-8E06-789D264F0D22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53BBE553-39B0-4CF5-8E06-789D264F0D22}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C2863C64-E6B0-4D64-8755-3D2B111779B4}
+	EndGlobalSection
+EndGlobal
