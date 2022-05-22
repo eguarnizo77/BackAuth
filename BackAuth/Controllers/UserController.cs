@@ -4,20 +4,24 @@ using BackAuth.Model.Response;
 using BackAuth.Tools;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BackAuth.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class UserController : Controller
     {
         private IUserService _userService;
+        private IValidationsService _validationsService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, 
+                              IValidationsService validationsService)
         {
             _userService = userService;
+            _validationsService = validationsService;
         }
 
         [HttpGet]
@@ -27,28 +31,36 @@ namespace BackAuth.Controllers
         }
 
         [HttpGet("{email}")]
-        public async Task<IActionResult> GetAllUsers(string email)
+        public async Task<IActionResult> GetUser(int id)
         {
-            return Ok(await _userService.GetUserDetails(email));
+            return Ok(await _userService.GetUser(id));
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] User user)
         {
             ResponseClient response = new ResponseClient();
-            if (user == null)
-                return BadRequest();
+            response.Success = false;
 
+            if (user == null)
+            {
+                response.Error = "Model null";
+               return BadRequest(response);
+            }               
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
+          
+            if (_validationsService.IsUserExist(user))
+            {
+                response.Error = "Email already exists";
+                return BadRequest(response);
+            }
+                                          
            user.Password = Encrypt.GetSHA256(user.Password);
+           await _userService.InserUser(user);
 
-            await _userService.InserUser(user);
-
-            response.Error = false;            
-
-            return Ok(response);            
+            response.Success = true;
+           return Ok(response);
         }
 
         [HttpPut]
@@ -60,7 +72,9 @@ namespace BackAuth.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            user.Password = Encrypt.GetSHA256(user.Password);
             await _userService.UpdateUser(user);
+
             return NoContent();
         }
 

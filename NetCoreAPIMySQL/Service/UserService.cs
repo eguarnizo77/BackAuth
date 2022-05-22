@@ -19,9 +19,9 @@ namespace BackAuth.Data.Service
             return _userEntity.GetAllUsers();
         }
 
-        public Task<User> GetUserDetails(string email)
+        public Task<User> GetUser(int id)
         {
-            return _userEntity.GetUserDetails(email);
+            return _userEntity.GetUser(id);
         }
 
         public Task<bool> InserUser(User user)

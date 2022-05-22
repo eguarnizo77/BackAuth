@@ -30,13 +30,15 @@ namespace BackAuth.Data.Service
         public UserAuthResponse Auth(AuthRequest model)
         {
             UserAuthResponse userResponse = new UserAuthResponse();
-            string password = Encrypt.GetSHA256(model.Password);
-            var users = _userEntity.GetAllUsers().Result;
 
+            string password = Encrypt.GetSHA256(model.Password);
+
+            var users = _userEntity.GetAllUsers().Result;
             var user = users.Where(x => x.Email == model.Email && x.Password == password).FirstOrDefault();
 
             if (user == null) return null;
 
+            userResponse.Success = true;
             userResponse.Email = user.Email;
             userResponse.Token = GetToken(user);
 

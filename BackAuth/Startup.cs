@@ -78,8 +78,7 @@ namespace BackAuth
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserEntity, UserEntity>();            
             services.AddScoped<IAuthenticationService, AuthenticationService>();
-
-
+            services.AddScoped<IValidationsService, ValidationsService>();            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

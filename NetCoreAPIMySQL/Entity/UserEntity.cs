@@ -9,7 +9,7 @@ namespace BackAuth.Data.Entity
     public interface IUserEntity
     {
         Task<IList<User>> GetAllUsers();
-        Task<User> GetUserDetails(string email);
+        Task<User> GetUser(int id);
         Task<bool> InserUser(User user);
         Task<bool> UpdateUser(User user);
         Task<bool> DeleteUser(User user);
@@ -35,14 +35,14 @@ namespace BackAuth.Data.Entity
             return (IList<User>)await db.QueryAsync<User>(sql, new { });
         }
 
-        public async Task<User> GetUserDetails(string email)
+        public async Task<User> GetUser(int id)
         {
             var db = dbConnection();
             var sql = @"SELECT id, email, username, password, bio, phone, state
                         FROM user
-                        WHERE email = @Email";
+                        WHERE id = @Id";
 
-            return await db.QueryFirstOrDefaultAsync<User>(sql, new { Email = email });
+            return await db.QueryFirstOrDefaultAsync<User>(sql, new { Id = id });
         }
 
         public async Task<bool> InserUser(User user)
