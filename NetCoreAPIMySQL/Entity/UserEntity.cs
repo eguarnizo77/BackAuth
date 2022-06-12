@@ -2,6 +2,7 @@
 using Dapper;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BackAuth.Data.Entity
@@ -29,7 +30,7 @@ namespace BackAuth.Data.Entity
         public async Task<IList<User>> GetAllUsers()
         {
             var db = dbConnection();
-            var sql = @"SELECT id, email, username, password, bio, phone, state
+            var sql = @"SELECT id, email, username, password, image, bio, phone, state
                         FROM user";
 
             return (IList<User>)await db.QueryAsync<User>(sql, new { });
@@ -38,20 +39,20 @@ namespace BackAuth.Data.Entity
         public async Task<User> GetUser(int id)
         {
             var db = dbConnection();
-            var sql = @"SELECT id, email, username, password, bio, phone, state
+            var sql = @"SELECT id, email, username, password, image, bio, phone, state
                         FROM user
                         WHERE id = @Id";
 
-            return await db.QueryFirstOrDefaultAsync<User>(sql, new { Id = id });
+            return (await db.QueryAsync<User>(sql, new { Id = id })).First();            
         }
 
         public async Task<bool> InserUser(User user)
         {
             var db = dbConnection();
-            var sql = @"INSERT INTO user(email, username, password, bio, phone, state)
-                        VALUES (@Email, @Username, @Password, @Bio, @Phone, @State) ";
+            var sql = @"INSERT INTO user(email, username, password, image, bio, phone, state)
+                        VALUES (@Email, @Username, @Password, @Image, @Bio, @Phone, @State) ";
 
-            var result = await db.ExecuteAsync(sql, new { user.Email, user.Username, user.Password, user.Bio, user.Phone, user.State });
+            var result = await db.ExecuteAsync(sql, new { user.Email, user.Username, user.Password, user.Image, user.Bio, user.Phone, user.State });
             return result > 0;
         }
 
@@ -59,10 +60,10 @@ namespace BackAuth.Data.Entity
         {
             var db = dbConnection();
             var sql = @"UPDATE user
-                        SET email = @Email, username = @Username, password = @Password, bio = @Bio, Phone @phone, state = @State
+                        SET email = @Email, username = @Username, password = @Password, image = @Image, bio = @Bio, Phone = @phone, state = @State
                         WHERE id = @Id ";
 
-            var result = await db.ExecuteAsync(sql, new { user.Email, user.Username, user.Bio, user.Password, user.Phone, user.State, user.Id });
+            var result = await db.ExecuteAsync(sql, new { user.Email, user.Username, user.Image, user.Bio, user.Password, user.Phone, user.State, user.Id });
             return result > 0;
         }
 

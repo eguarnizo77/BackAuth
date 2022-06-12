@@ -1,10 +1,10 @@
 ﻿using BackAuth.Data.Interface;
 using BackAuth.Model;
+using BackAuth.Model.Request;
 using BackAuth.Model.Response;
 using BackAuth.Tools;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BackAuth.Controllers
@@ -23,17 +23,21 @@ namespace BackAuth.Controllers
             _userService = userService;
             _validationsService = validationsService;
         }
-
+        
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
             return Ok(await _userService.GetAllUsers());
         }
 
-        [HttpGet("{email}")]
-        public async Task<IActionResult> GetUser(int id)
+        [Route("GetUserByEmail")]
+        [HttpPost]
+        public IActionResult GetUserByEmail([FromBody] UserEmailRequest userEmail)
         {
-            return Ok(await _userService.GetUser(id));
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return Ok(_userService.GetUserByEmail(userEmail.Email));
         }
 
         [HttpPost]
@@ -66,16 +70,39 @@ namespace BackAuth.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateUser([FromBody] User user)
         {
+            ResponseClient response = new ResponseClient();
+            response.Success = false;
+
             if (user == null)
-                return BadRequest();
+            {
+                response.Error = "Model null";
+                return BadRequest(response);
+            }
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            user.Password = Encrypt.GetSHA256(user.Password);
-            await _userService.UpdateUser(user);
+            if (user.Id.Equals(""))
+            {
+                response.Error = "Error model";
+                return BadRequest(response);
+            }
 
-            return NoContent();
+
+            User userUpdate = _userService.GetUserById(user.Id).Result;
+            user.Password = user.Password != userUpdate.Password ? Encrypt.GetSHA256(user.Password) : userUpdate.Password;            
+            userUpdate.Email = user.Email != string.Empty && userUpdate.Email != user.Email ? user.Email : userUpdate.Email;
+            userUpdate.Password = user.Password != string.Empty && userUpdate.Password != user.Password ? user.Password : userUpdate.Password;
+            userUpdate.Username = user.Username != string.Empty && userUpdate.Username != user.Username ? user.Username : userUpdate.Username;
+            userUpdate.Image = user.Image != 0 && userUpdate.Image != user.Image ? user.Image : userUpdate.Image;
+            userUpdate.Bio = user.Bio != string.Empty && userUpdate.Bio != user.Bio ? user.Bio : userUpdate.Bio;
+            userUpdate.Phone = user.Phone;
+            userUpdate.State = userUpdate.State != user.State ? user.State : userUpdate.State;
+            
+            await _userService.UpdateUser(userUpdate);
+
+            response.Success = true;
+            return Ok(response);
         }
 
         [HttpDelete("{id}")]

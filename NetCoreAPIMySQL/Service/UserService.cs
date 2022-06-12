@@ -3,6 +3,7 @@ using BackAuth.Model;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BackAuth.Data.Entity;
+using System.Linq;
 
 namespace BackAuth.Data.Service
 {
@@ -19,9 +20,11 @@ namespace BackAuth.Data.Service
             return _userEntity.GetAllUsers();
         }
 
-        public Task<User> GetUser(int id)
+        public User GetUserByEmail(string email)
         {
-            return _userEntity.GetUser(id);
+            var users = _userEntity.GetAllUsers().Result;
+            var user = users.Where(x => x.Email == email).FirstOrDefault();
+            return user;
         }
 
         public Task<bool> InserUser(User user)
@@ -37,6 +40,11 @@ namespace BackAuth.Data.Service
         public Task<bool> DeleteUser(User user)
         {
             return _userEntity.DeleteUser(user);
+        }
+
+        public Task<User> GetUserById(int id)
+        {
+            return _userEntity.GetUser(id);
         }
     }
 }
