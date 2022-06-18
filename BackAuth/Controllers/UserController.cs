@@ -54,7 +54,7 @@ namespace BackAuth.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
           
-            if (_validationsService.IsUserExist(user.Email))
+            if (_validationsService.IsUserExist(user))
             {
                 response.Error = "Email already exists";
                 return BadRequest(response);

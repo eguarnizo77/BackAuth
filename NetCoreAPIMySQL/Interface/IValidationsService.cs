@@ -4,7 +4,7 @@ namespace BackAuth.Data.Interface
 {
     public interface IValidationsService
     {
-        bool IsUserExist (string user);
+        bool IsUserExist (User user);
     }
 
 }

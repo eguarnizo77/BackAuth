@@ -15,16 +15,13 @@ namespace BackAuth.Controllers
     {
         private readonly IAuthenticationService _authenticationService;
         private IUserService _userService;
-        private ISendingEmailService _sendingEmailService;
         private IValidationsService _validationsService;
         public AuthenticationController(IAuthenticationService authenticationService, 
                                         IUserService userService, 
-                                        ISendingEmailService sendingEmailService,
                                         IValidationsService validationsService)
         {
             _authenticationService = authenticationService;            
             _userService = userService;
-            _sendingEmailService = sendingEmailService;
             _validationsService = validationsService;
         }
 
@@ -45,32 +42,6 @@ namespace BackAuth.Controllers
             return Ok(userResponse);
         }
 
-        [Route("PasswordReset")]
-        [HttpPost]
-        public async Task<IActionResult> PasswordReset([FromBody] UserEmailRequest userEmail)
-        {
-            ResponseClient responseError = new ResponseClient();         
-            ResponseCodeReset  response = new ResponseCodeReset();
-            int codeReset = 0;
-            string bodyEmail = string.Empty;            
-            response.Success = true;
-
-            codeReset =  _sendingEmailService.GenerateCode();
-            bodyEmail = "<p>Hola, recibimos una solicitud para estrablecer tu contraseña</p> <br/>" +
-                        "<p><b>"+codeReset +"</b></p>";
-
-            if (!_validationsService.IsUserExist(userEmail.Email))
-            {
-                responseError.Success = false;
-                responseError.Error = "Email already exists";
-                return BadRequest(responseError);
-            }
-
-            //await _sendingEmailService.SendEmail(userEmail.Email, "Password reset Authenticathion - App", bodyEmail);
-            response.Code = codeReset;
-            return Ok(response);
-        }
-
         [Route("CreateUser")]
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] User user)
@@ -86,7 +57,7 @@ namespace BackAuth.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (_validationsService.IsUserExist(user.Email))
+            if (_validationsService.IsUserExist(user))
             {
                 response.Error = "Email already exists";
                 return BadRequest(response);

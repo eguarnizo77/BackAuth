@@ -36,13 +36,6 @@ namespace BackAuth
         public void ConfigureServices(IServiceCollection services)
         {            
             var apiConfiguration = new APIConfiguration(Configuration.GetConnectionString("MySqlConnection"));
-            var sectionEmail = Configuration.GetSection("EmailConfiguration");
-            services.Configure<EmailSettings>(sectionEmail);
-
-            var settigsEmail = sectionEmail.Get<EmailSettings>();
-            var emailConfiguration = new EmailConfiguration(settigsEmail.Email, settigsEmail.Password);
-
-            services.AddSingleton(emailConfiguration);
             services.AddSingleton(apiConfiguration);
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -88,7 +81,6 @@ namespace BackAuth
             services.AddScoped<IValidationsService, ValidationsService>();
             services.AddScoped<IImageProfileService, ImageProfileService>();
             services.AddScoped<IImageProfileEntity, ImageProfileEntity>();
-            services.AddScoped<ISendingEmailService, SendingEmailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
