@@ -14,12 +14,12 @@ namespace BackAuth.Data.Service
             _userService = userService;
         }
 
-        public bool IsUserExist(User user)
+        public bool IsUserExist(string email)
         {
             User userExist = new User();
             var users = _userService.GetAllUsers().Result;
 
-            userExist = users.Where(x => x.Email == user.Email).FirstOrDefault();
+            userExist = users.Where(x => x.Email == email).FirstOrDefault();
 
             return userExist != null ? true : false;
         }
