@@ -78,7 +78,7 @@ namespace BackAuth
                 options.AddPolicy(name: _MyCors, builder =>
                 {
                     //builder.AllowAnyOrigin("*");
-                    builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost")
+                    builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "62b376e5b99f4e24579f28d4--ubiquitous-croquembouche-e7da09.netlify.app")
                     .AllowAnyHeader().AllowAnyMethod();
                 });
             });
