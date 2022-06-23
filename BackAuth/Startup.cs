@@ -73,15 +73,15 @@ namespace BackAuth
                     };
                 });
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy(name: _MyCors, builder =>
-                {
-                    //builder.AllowAnyOrigin("*");
-                    builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "https://tranquil-platypus-530c6d.netlify.app")
-                    .AllowAnyHeader().AllowAnyMethod();
-                });
-            });
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy(name: _MyCors, builder =>
+            //    {
+            //        //builder.AllowAnyOrigin("*");
+            //        builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "https://tranquil-platypus-530c6d.netlify.app")
+            //        .AllowAnyHeader().AllowAnyMethod();
+            //    });
+            //});            
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserEntity, UserEntity>();            
             services.AddScoped<IAuthenticationService, AuthenticationService>();
@@ -105,7 +105,12 @@ namespace BackAuth
 
             app.UseRouting();
 
-            app.UseCors(_MyCors);
+            app.UseCors(options =>
+            {
+                options.WithOrigins("https://tranquil-platypus-530c6d.netlify.app");
+                options.AllowAnyMethod();
+                options.AllowAnyHeader();                
+            });
 
             app.UseAuthentication();
 
