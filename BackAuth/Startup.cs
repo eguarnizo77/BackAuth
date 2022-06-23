@@ -78,7 +78,7 @@ namespace BackAuth
                 options.AddPolicy(name: _MyCors, builder =>
                 {
                     //builder.AllowAnyOrigin("*");
-                    builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost")
+                    builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "https://tranquil-platypus-530c6d.netlify.app")
                     .AllowAnyHeader().AllowAnyMethod();
                 });
             });
