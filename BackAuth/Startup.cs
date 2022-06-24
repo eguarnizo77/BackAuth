@@ -107,7 +107,7 @@ namespace BackAuth
 
             app.UseCors(options =>
             {
-                options.WithOrigins("https://62b63e71fe722100606bac25--tranquil-platypus-530c6d.netlify.app");
+                options.WithOrigins("https://tranquil-platypus-530c6d.netlify.app");
                 options.AllowAnyMethod();
                 options.AllowAnyHeader();                
             });
