@@ -53,11 +53,7 @@ namespace BackAuth.Controllers
             ResponseCodeReset  response = new ResponseCodeReset();
             int codeReset = 0;
             string bodyEmail = string.Empty;            
-            response.Success = true;
-
-            codeReset =  _sendingEmailService.GenerateCode();
-            bodyEmail = "<p>Hola, recibimos una solicitud para estrablecer tu contraseña</p> <br/>" +
-                        "<p><b>"+codeReset +"</b></p>";
+            response.Success = true;           
 
             if (!_validationsService.IsUserExist(userEmail.Email))
             {
@@ -66,7 +62,11 @@ namespace BackAuth.Controllers
                 return BadRequest(responseError);
             }
 
-            //await _sendingEmailService.SendEmail(userEmail.Email, "Password reset Authenticathion - App", bodyEmail);
+            User user = _userService.GetUserByEmail(userEmail.Email);
+            codeReset = _sendingEmailService.GenerateCode();
+            bodyEmail = _sendingEmailService.GenerateBodyHtml(codeReset, user.Username);
+
+            await _sendingEmailService.SendEmail(userEmail.Email, "Restablecimiento de contraseña Authenticathion - App", bodyEmail);
             response.Code = codeReset;
             return Ok(response);
         }
