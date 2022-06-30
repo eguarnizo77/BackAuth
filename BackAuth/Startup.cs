@@ -40,7 +40,9 @@ namespace BackAuth
             services.Configure<EmailSettings>(sectionEmail);
 
             var settigsEmail = sectionEmail.Get<EmailSettings>();
-            var emailConfiguration = new EmailConfiguration(settigsEmail.Email, settigsEmail.Password);
+            var emailConfiguration = new EmailConfiguration(settigsEmail.Email, settigsEmail.Password, 
+                                                            settigsEmail.Host, settigsEmail.Port, settigsEmail.Ssl,
+                                                            settigsEmail.DefaulCredentials);
 
             services.AddSingleton(emailConfiguration);
             services.AddSingleton(apiConfiguration);
